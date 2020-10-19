@@ -16,14 +16,16 @@ class Tabs extends Panel
     /**
      * Add fields to the Tab.
      *
-     * @param string $tab
-     * @param array  $fields
+     * @param $tab
+     * @param array $fields
+     *
+     * @return $this
      */
     public function addFields($tab, array $fields)
     {
         foreach ($fields as $field) {
             if ($field instanceof ListableField || $field instanceof Panel) {
-                $this->addTab($field);
+                $this->addTab($field, $tab);
                 continue;
             }
             if ($field instanceof MergeValue) {
@@ -42,13 +44,18 @@ class Tabs extends Panel
 
     /**
      * Add a new Tab
+     *
+     * @param $panel
+     * @param null $tab
+     *
+     * @return Tabs
      */
-    public function addTab($panel): self
+    public function addTab($panel, $tab = null): self
     {
         if ($panel instanceof ListableField) {
             $panel->panel = $this->name;
             $panel->withMeta([
-                'tab'         => $panel->name,
+                'tab'         => $tab ?? $panel->name,
                 'listable'    => false,
                 'listableTab' => true,
             ]);
